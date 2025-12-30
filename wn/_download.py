@@ -4,8 +4,6 @@ from typing import Optional
 from pathlib import Path
 import logging
 
-import httpx
-
 import wn
 from wn._util import is_url
 from wn.util import ProgressHandler, ProgressBar
@@ -90,6 +88,9 @@ def _get_cache_path_and_urls(project_or_url: str) -> tuple[Optional[Path], list[
 
 
 def _download(urls: Sequence[str], progress: ProgressHandler) -> Path:
+    # Lazy import so that httpx is only required if/when downloading
+    import httpx
+
     client = httpx.Client(timeout=TIMEOUT, follow_redirects=True)
     try:
         for i, url in enumerate(urls, 1):

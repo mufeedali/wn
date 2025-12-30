@@ -33,11 +33,13 @@ classifiers = [
 ]
 
 dependencies = [
-  "httpx",
   "tomli; python_version < '3.11'",
 ]
 
 [project.optional-dependencies]
+download = [
+  "httpx",
+]
 web = [
   "starlette",
 ]
