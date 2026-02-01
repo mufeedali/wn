@@ -2,13 +2,18 @@ import logging
 from collections.abc import Sequence
 from pathlib import Path
 
-import httpx
-
 from wn._add import add as add_to_db
 from wn._config import config
 from wn._exceptions import Error
 from wn._util import is_url
 from wn.util import ProgressBar, ProgressHandler
+
+try:
+    import httpx
+
+    HTTPX_AVAILABLE = True
+except ImportError:
+    HTTPX_AVAILABLE = False
 
 CHUNK_SIZE = 8 * 1024  # how many KB to read at a time
 TIMEOUT = 10  # number of seconds to wait for a server response
@@ -87,6 +92,9 @@ def _get_cache_path_and_urls(project_or_url: str) -> tuple[Path | None, list[str
 
 
 def _download(urls: Sequence[str], progress: ProgressHandler) -> Path:
+    if not HTTPX_AVAILABLE:
+        raise Error("HTTPX is unavailable; cannot download")
+
     client = httpx.Client(timeout=TIMEOUT, follow_redirects=True)
     try:
         for i, url in enumerate(urls, 1):

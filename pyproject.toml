@@ -33,13 +33,15 @@ classifiers = [
 ]
 
 dependencies = [
-  "httpx",
   "tomli; python_version < '3.11'",
 ]
 
 [project.optional-dependencies]
 editor = [
   "wn-editor"
+]
+download = [
+  "httpx"
 ]
 
 [project.urls]
@@ -63,6 +65,7 @@ extra-dependencies = [
 [tool.hatch.envs.mypy]
 dependencies = [
   "mypy",
+  "httpx",
 ]
 
 [tool.hatch.envs.mypy.scripts]
